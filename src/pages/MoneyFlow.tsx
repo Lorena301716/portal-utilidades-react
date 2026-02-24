@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form"
+import type { SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { financeSchema } from "../schemas/financeSchema"
 import type { FinanceFormData } from "../schemas/financeSchema"
@@ -13,11 +14,11 @@ export default function MoneyFlow() {
     reset,
     formState: { errors }
   } = useForm<FinanceFormData>({
-    resolver: zodResolver(financeSchema)
+    resolver: zodResolver(financeSchema) as any
   })
 
-  function onSubmit(data: FinanceFormData) {
-    setItems([...items, data])
+  const onSubmit: SubmitHandler<FinanceFormData> = (data) => {
+    setItems((prev) => [...prev, data])
     reset()
   }
 
@@ -32,7 +33,6 @@ export default function MoneyFlow() {
       </h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mb-8">
-
         <div>
           <input
             {...register("description")}
@@ -67,7 +67,6 @@ export default function MoneyFlow() {
         >
           Adicionar
         </button>
-
       </form>
 
       <ul className="space-y-3">
